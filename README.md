@@ -1,4 +1,4 @@
-gex
-===
+Gex: Geant4 Extensions
+====
 
-Geant4 extensions for users
+Tools and adapters for Geant4 users.
