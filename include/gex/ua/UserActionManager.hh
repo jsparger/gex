@@ -1,5 +1,15 @@
-#ifndef GETA_UA_USER_ACTION_MANAGER_HH
-#define GETA_UA_USER_ACTION_MANAGER_HH
+//---------------------------------------------------------------------------//
+// Copyright (c) 2014 John Sparger <jsparger87@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See https://github.com/jsparger/gex for more information.
+//---------------------------------------------------------------------------//
+
+#ifndef GEX_UA_USER_ACTION_MANAGER_HH
+#define GEX_UA_USER_ACTION_MANAGER_HH
 
 #include "G4UserEventAction.hh"
 #include "G4UserRunAction.hh"
