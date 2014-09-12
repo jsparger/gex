@@ -20,9 +20,9 @@ namespace gex {
 namespace sd {
 
 /// \class SimTimeOfHitSD
-/// \brief  
+/// \brief Stores the time of a hit according to some user defined simulation clock.
 ///
-/// SimTimeOfHitSD is a sensitive detector which checks each G4Event's G4UserEventInformation for a data::NamedData containing a data::TimeData called "simTime". This class was created to store the time of a hit according to a simulation clock (as opposed to Geant4's clock which resets to zero at the beginning of each event).
+/// SimTimeOfHitSD is a sensitive detector which checks each G4Event's G4UserEventInformation for a data::NamedData containing a data::TimeData called "simTime". This class was created to store the time of a hit according to some user defined simulation clock (as opposed to Geant4's clock which resets to zero at the beginning of each event).
 class SimTimeOfHitSD : public SDModule, public G4UserEventAction, public ua::UserAction
 {
 public:

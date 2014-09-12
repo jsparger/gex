@@ -41,9 +41,9 @@ enum class Cycle
 };
 
 /// \class Callback
-/// \brief A UserAction which can execute an arbitrary function at any place during the simulation where Geant4 exposes a user action hook.
+/// \brief Can execute an arbitrary function at any place during the simulation where Geant4 exposes a user action hook.
 ///
-/// Callback accepts a std::function with no return arguments which it will execute at the simulation cycle locations specified by the user. This class works by registering itself with the UserActionManager as the type of G4UserActions needed to trigger at the selected cycle locations.
+/// Callback removes the need to write G4UserAction class boilerplate to execute some small task during the simulation cycle. Callback accepts a std::function with no return arguments which it will execute at the simulation cycle locations specified by the user. This class works by registering itself with the UserActionManager as the type of G4UserActions needed to trigger at the selected cycle locations.
 class Callback : 	public UserAction, public G4UserEventAction, public G4UserRunAction, 
 				  	public G4UserStackingAction, public G4UserSteppingAction, 
 					public G4UserTrackingAction
