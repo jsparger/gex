@@ -27,6 +27,7 @@ void
 Callback::
 registerWith(UserActionManager* uam)
 {
+	// TODO: couldn't this be moved to constructor?
 	for (const auto& cycle : cycleSet)
 	{	
 		if (Cycle::EVENT_BEGIN == cycle) 		{ isEventAction = true; 	doEventBegin = true;	}

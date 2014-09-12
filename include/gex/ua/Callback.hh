@@ -48,12 +48,6 @@ class Callback : 	public UserAction, public G4UserEventAction, public G4UserRunA
 				  	public G4UserStackingAction, public G4UserSteppingAction, 
 					public G4UserTrackingAction
 {
-protected:
-	std::function<void()> theCallback;
-	std::set<Cycle> cycleSet;
-	bool isEventAction, isRunAction, isStackingAction, isSteppingAction, isTrackingAction;
-	bool doEventBegin, doEventEnd, doRunBegin, doRunEnd, doStackStage, doStackEvent, doStackTrack, doTrackPre, doTrackPost;
-	
 public:
 	/// Constructor. Provide a no-arg, no return callback function \p func and a set of simulation cycle times at which this callback should be executed.
 	Callback(std::function<void()> func, std::set<Cycle> initCycle);
@@ -72,6 +66,12 @@ public:
 	virtual void UserSteppingAction(const G4Step*) override;
 	virtual void PreUserTrackingAction(const G4Track*) override;
 	virtual void PostUserTrackingAction(const G4Track*) override;
+	
+protected:
+	std::function<void()> theCallback;
+	std::set<Cycle> cycleSet;
+	bool isEventAction, isRunAction, isStackingAction, isSteppingAction, isTrackingAction;
+	bool doEventBegin, doEventEnd, doRunBegin, doRunEnd, doStackStage, doStackEvent, doStackTrack, doTrackPre, doTrackPost;
 };
 	
 } // namespace ua 
