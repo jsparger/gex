@@ -22,6 +22,7 @@
 namespace gex {
 namespace data {
 
+/// @cond
 // a helper class for UserInfoAccess	
 template <class T>	
 struct UserInfoWrapper : public T
@@ -40,6 +41,7 @@ struct UserInfoWrapper<G4VUserTrackInformation> : public G4VUserTrackInformation
 	virtual void Print() const override {;}
 	std::unique_ptr<NamedData> data;
 };
+/// @endcond
 
 /// \class UserInfoAccess
 /// \brief Allows a NamedData to be attached to or read from any Geant4 class which allows user information to be stored with it.
