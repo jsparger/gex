@@ -11,16 +11,14 @@
 #ifndef GEX_DATA_IDATA
 #define GEX_DATA_IDATA 
 
-//#include <typeinfo>
-//#include <typeindex>
 #include <string>
 #include <vector>
 
 namespace gex {
 namespace data {
 
-/// \class Abstract base for data classes which use run-time ROOT dictionary compilation.
-/// \brief  
+/// \class IData
+/// \brief Abstract base for data classes which use run-time ROOT dictionary compilation.
 ///
 ///
 struct IData
@@ -31,9 +29,7 @@ struct IData
 	virtual void reset() {;}
 	
 	virtual IData* clone() { return new IData(); }
-	
-	//const std::type_index type;
-	
+		
 	static std::vector<std::string> GetDictionaryTypes()
 	{
 		std::vector<std::string> types;

@@ -21,8 +21,8 @@ namespace ua {
 	
 namespace data {
 
-/// \class Abstract base class for classes which would like to register data with a RootTreeManager.
-/// \brief  
+/// \class IDataOutputter
+/// \brief  Abstract base class for classes which would like to register data with a RootTreeManager.
 ///
 ///
 struct IDataOutputter

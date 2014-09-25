@@ -8,4 +8,4 @@
 // See https://github.com/jsparger/gex for more information.
 //---------------------------------------------------------------------------//
 
-#include "gex/data/DetectorData.hh"
+#include "gex/data/UserInfoAccess.hh"
