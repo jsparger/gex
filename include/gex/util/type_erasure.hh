@@ -17,6 +17,8 @@
 namespace gex {
 namespace util {
 
+/// @cond
+	
 // A wrapper around dynamic cast modeled after boost::any_cast
 // TODO: what error checking should be done at the point of cast?	
 template <class T>
@@ -107,6 +109,8 @@ public:
 	
 	container_type store;
 };
+
+/// @endcond
 	
 } // namespace util 
 } // namespace gex 

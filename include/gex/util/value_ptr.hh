@@ -15,7 +15,7 @@ namespace gex {
 namespace util {
 
 /// \class value_ptr
-/// A smart pointer with copy semantics.
+/// \brief A smart pointer with copy semantics.
 ///
 /// This class wraps a pointer of any class with a clone() method. It provides the following functionality: 
 /// -# when the wrapper is copied the managed object is cloned.
