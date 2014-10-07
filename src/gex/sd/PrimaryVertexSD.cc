@@ -13,7 +13,6 @@
 #include "gex/ua/UserActionManager.hh"
 #include <iostream>
 #include "G4Event.hh"
-#include "gex/pga/CrappyEventInfo.hh"
 #include "gex/data/UserInfoAccess.hh"
 #include "gex/data/NamedData.hh"
 #include "gex/util/Access.hh"

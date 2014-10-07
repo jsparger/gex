@@ -13,7 +13,6 @@
 #include "gex/ua/UserActionManager.hh"
 #include <iostream>
 #include "G4Event.hh"
-#include "gex/pga/CrappyEventInfo.hh"
 #include "gex/data/UserInfoAccess.hh"
 #include "gex/data/NamedData.hh"
 #include "gex/util/Access.hh"
@@ -47,13 +46,6 @@ G4bool
 SimTimeOfHitSD::
 ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-	// if (false == data->isSet && step->GetTotalEnergyDeposit() > 0)
-	// {
-	// 	data->isSet = true;
-	// 	CrappyEventInfo* eventInfo = (CrappyEventInfo*)event->GetUserInformation();
-	// 	data->time = step->GetTrack()->GetGlobalTime() + eventInfo->simulationTime;
-	// }
-	
 	if (false == data->isSet && step->GetTotalEnergyDeposit() > 0)
 	{
 		data->isSet = true;

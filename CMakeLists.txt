@@ -2,8 +2,8 @@
 # Set up the project
 
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(gex)
-set(target gex)
+project(Gex)
+set(target Gex)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 #----------------------------------------------------------------------------

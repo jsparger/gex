@@ -65,7 +65,11 @@ struct UserInfoAccess
 		auto* wrapper = dynamic_cast<UserInfoWrapper<G4InfoType>*>(g4obj->GetUserInformation());
 		if (nullptr == wrapper)
 		{
-			throwWrongTypeError(); // TODO: translate this into error.
+			std::stringstream ss;
+			ss  << "UserInfoAccess::get(...): Error! UserInfo was either null not of expected type. "
+				<< "Check for null first with UserInfoAccess::hasData(...). If this return true, "
+				<< "have you added an incompatible G4UserInformation to this object somewhere else?";
+			throw(std::runtime_error(ss.str()));
 		}
 		else
 		{
@@ -80,19 +84,6 @@ struct UserInfoAccess
 		wrapper->data = std::move(data);
 		g4obj->SetUserInformation(wrapper);
 	}
-
-
-protected:
-
-	void throwWrongTypeError()
-	{
-		std::stringstream ss;
-		ss  << "UserInfoAccess::get(...): Error! UserInfo was either null not of expected type. "
-			<< "Check for null first with UserInfoAccess::hasData(...). If this return true, "
-			<< "have you added an incompatible G4UserInformation to this object somewhere else?";
-		throw(std::runtime_error(ss.str()));
-	}
-
 };
 	
 } // namespace data 

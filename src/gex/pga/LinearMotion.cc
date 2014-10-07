@@ -13,7 +13,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4Event.hh"
-#include "gex/pga/CrappyEventInfo.hh"
 #include "gex/data/UserInfoAccess.hh"
 #include "gex/data/NamedData.hh"
 #include "gex/data/TimeData.hh"
@@ -39,9 +38,6 @@ getPosition(unsigned int nDecays, G4Event* event)
 	G4ThreeVector basePosition = startPosition + velocity*time;
 	G4ThreeVector position =  basePosition + stationarySpatial->getPosition();
 	
-	// CrappyEventInfo* eventInfo = new CrappyEventInfo();
-	// eventInfo->simulationTime = time;
-	// event->SetUserInformation(eventInfo);
 	data::UserInfoAccess<G4Event> infoAccess;
 	if (infoAccess.hasData(event))
 	{
