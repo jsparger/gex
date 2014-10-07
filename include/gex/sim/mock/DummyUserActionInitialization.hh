@@ -22,6 +22,8 @@ namespace mock {
 
 /// \class DummyUserActionInitialization
 /// \brief Mock user action initialization.
+///
+/// Sets the primary generator action to DummyPrimaryGenerator and the run action to DummyRunAction.
 class DummyUserActionInitialization : public G4VUserActionInitialization
 {
 public:

@@ -22,6 +22,8 @@ namespace mock {
 
 /// \class DummyPrimaryGenerator
 /// \brief Mock primary generator action.
+///
+/// Generates no primaries. Sleeps for 20 milliseconds per event to simulate work.
 class DummyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 public:

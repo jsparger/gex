@@ -25,6 +25,8 @@ namespace mock {
 
 /// \class DummyDetectorConstruction
 /// \brief Mock detector construction.
+///
+/// Builds an empty world volume filled with air.
 class DummyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:

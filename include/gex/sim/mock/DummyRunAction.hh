@@ -20,6 +20,8 @@ namespace mock {
 
 /// \class DummyRunAction
 /// \brief Mock run action.
+///
+/// Does nothing except print to standard out at the beginning and end of runs.
 class DummyRunAction : public G4UserRunAction
 {
 public:

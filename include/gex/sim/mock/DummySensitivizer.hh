@@ -19,6 +19,8 @@ namespace mock {
 	
 /// \class DummySensitivizer
 /// \brief Mock sensitivizer.
+///
+/// Does not create any sensitive detectors.
 class DummySensitivizer : public sd::Sensitivizer
 {
 public:
