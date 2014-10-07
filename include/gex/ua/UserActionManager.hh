@@ -100,6 +100,7 @@ protected:
 // user actions and call them one by one when a method is invoked by the 
 // G4RunManager.
 
+/// @cond
 /// \class EventActionGroup
 /// \brief Utility class for UserActionManager.
 class EventActionGroup : public G4UserEventAction
@@ -172,6 +173,7 @@ public:
 	void PreUserTrackingAction(const G4Track*) override;
 	void PostUserTrackingAction(const G4Track*) override;
 };
+/// @endcond
 
 } // namespace ua
 } // namespace gex

@@ -23,10 +23,10 @@ int main()
 	//REQUIRED for some Cern ROOT things to work. So weird.
 	TApplication theApp("theApp", 0, 0); 
 	// initialize random engine
-    CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); 
-    G4Random::setTheEngine( &defaultEngine ); 
-    G4int seed = time( NULL ); 
-    G4Random::setTheSeed( seed );
+	CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); 
+	G4Random::setTheEngine( &defaultEngine ); 
+	G4int seed = time( NULL ); 
+	G4Random::setTheSeed( seed );
 	
 	// create a multithreaded simulation with 4 threads. This *must* be done first in a program to initialize Geant4.
 	Geant4Simulation sim(true,4);
@@ -44,7 +44,7 @@ int main()
 	
 	// create a geometry manager. Give it our world volume and sensitivizer.
 	// next, we add the geometry elements we want in our world volume. In this case we add a custom built detector and a custom built concrete slab.
-	auto* geometryManager = new geom::GeometryManager(world,sens);
+	auto geometryManager = new geom::GeometryManager(world,sens);
 	geometryManager->addGeometry(std::make_unique<MyDetector>());
 	geometryManager->addGeometry(std::make_unique<MyConcreteSlab>());
 	
