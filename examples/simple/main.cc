@@ -13,13 +13,19 @@
 #include "G4SystemOfUnits.hh"
 #include "QGSP_BIC.hh"
 
-#include "gex/test/Geant4Simulation.hh"
-#include "gex/geom/GeometryManager.hh"
-#include "gex/geom/BoxWorld.hh"
+#include <gex/sim/Geant4Simulation.hh>
+#include <gex/geom/GeometryManager.hh>
+#include <gex/geom/BoxWorld.hh>
+
+#include "MyConcreteSlab.hh"
+#include "MyDetector.hh"
+#include "MySensitivizer.hh"
+#include "MyUserActionInitialization.hh"
 
 int main()
 {
 	// TODO: maybe these initializations should be put in a helper function?
+	// gex::sim::initialize(); // <-- maybe like this?
 	//REQUIRED for some Cern ROOT things to work. So weird.
 	TApplication theApp("theApp", 0, 0); 
 	// initialize random engine
@@ -29,14 +35,14 @@ int main()
 	G4Random::setTheSeed( seed );
 	
 	// create a multithreaded simulation with 4 threads. This *must* be done first in a program to initialize Geant4.
-	Geant4Simulation sim(true,4);
+	gex::sim::Geant4Simulation sim(true,4);
 	
-	// create a simulation clock
-	auto clock = std::make_unique<util::TSAccumulator<double>>(0.0*s);
+	// create a simulation clock with an initial time of 0 seconds.
+	auto clock = std::make_unique<gex::util::TSAccumulator<double>>(0.0*s);
 	
 	// create our custom sensitivizer
 	std::string fileName = "../output/simple";
-	gex::sd::Sensitivizer* sens = new MySensitivizer(fileName,"tree");
+	auto sens = new MySensitivizer(fileName,"tree");
 	
 	// Create our world volume.
 	gex::geom::BoxWorld bw(300*m,50*m,100*m);
@@ -44,7 +50,7 @@ int main()
 	
 	// create a geometry manager. Give it our world volume and sensitivizer.
 	// next, we add the geometry elements we want in our world volume. In this case we add a custom built detector and a custom built concrete slab.
-	auto geometryManager = new geom::GeometryManager(world,sens);
+	auto geometryManager = new gex::geom::GeometryManager(world,sens);
 	geometryManager->addGeometry(std::make_unique<MyDetector>());
 	geometryManager->addGeometry(std::make_unique<MyConcreteSlab>());
 	
