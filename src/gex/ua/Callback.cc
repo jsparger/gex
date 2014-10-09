@@ -12,12 +12,6 @@
 
 namespace gex {
 namespace ua {
-	
-void create_callback(std::function<void()> func, std::set<Cycle> initCycle)
-{
-	UserActionManager::GetUserActionManager()->
-		registerAction(std::make_unique<gex::ua::Callback>(func, initCycle));
-}
 
 Callback::
 Callback(std::function<void()> func, std::set<Cycle> initCycle)

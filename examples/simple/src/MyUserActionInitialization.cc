@@ -29,11 +29,11 @@ Build() const
 	
 	// -- Get the thread local UserActionManager:
 	// In Gex, we will register our user actions with this class instead of the G4RunManager. Unlike the G4RunManager, UserActionManager lets us have more than one of each type of user action if we wish. This allows each user action to have a single, specific job.
-	auto* uam = ua::UserActionManager::GetUserActionManager();
+	auto* uam = gex::ua::UserActionManager::GetUserActionManager();
 	
 	// -- Set up the Cern ROOT file for data storage:
 	// Get the RootTreeManager for the fileName. Register the RootTreeManager with the UserActionManager so it works.
-	auto* rtm = ua::RootTreeManager::GetRootTreeManager(fileName);
+	auto* rtm = gex::ua::RootTreeManager::GetRootTreeManager(fileName);
 	uam->registerAction(rtm);
 	
 	// -- Build the source:
@@ -47,7 +47,7 @@ Build() const
 	};
 	
 	// Create a SourceConfig and let the UserActionManager adopt it. We do this because we need the distributions in our SourceConfig to live for the duration of the simulation. If the UserActionManager did not adopt the SourceConfig, it would be deleted at the end of this Build() method.
-	SourceConfig* sourceConfig = uam->adopt(std::make_unique<SourceConfig>());
+	auto* sourceConfig = gex::ua::create<SourceConfig>();
 	
 	// create a generic source using the distributions in our source configuration.
 	auto* source = new gex::pga::GenericSource(
@@ -70,11 +70,11 @@ void BuildForMaster() const override
 	
 	// -- Set up an action that will reset the clock at the beginning of each run.
 	// create a function to reset our clock.
-	clockptr = clock.get();
+	auto clockptr = clock.get();
 	auto clockResetFcn = [clockptr] { clockptr->reset() };
 	
 	// register our clock reset function to be called at the beginning of
-	gex::ua::create_callback(clockResetFcn, {gex::ua::Cycle::RUN_BEGIN})
+	gex::ua::create<Callback>(clockResetFcn, {gex::ua::Cycle::RUN_BEGIN});
 }
 
 

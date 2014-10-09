@@ -19,6 +19,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <type_traits>
 #include "gex/ua/UserAction.hh"
 #include "gex/ua/LifetimeExtension.hh"
 #include "gex/util/make_unique.hh"
@@ -95,6 +96,26 @@ protected:
 	thread_local static std::unique_ptr<UserActionManager> theInstance;
 	friend std::unique_ptr<UserActionManager>::deleter_type;
 };
+
+/// \related UserActionManager
+/// \brief Creates an object of type T and transfer ownership to the UserActionManager. Returns a pointer to the object.
+template<class T, class... Args>
+std::enable_if<!std::is_convertible<T*, UserAction*>::value,T>::type* 
+create(Args&&... args) 
+{
+	auto uam = UserActionManager::GetUserActionManager();
+    return uam->adopt(std::make_unique<T>(std::forward<Args>(args)...));
+}
+
+/// \related UserActionManager
+/// \brief Creates, transfers ownership to, and registers a UserAction with the UserActionManager. Returns a pointer to the UserAction.
+template<class T, class... Args>
+std::enable_if<std::is_convertible<T*, UserAction*>::value,T>::type*
+create(Args&&... args)
+{
+	auto uam = UserActionManager::GetUserActionManager();
+    return uam->registerAction(std::make_unique<T>(std::forward<Args>(args)...));
+}
 
 // These are classes for use only by UserActionManager. They hold the modular
 // user actions and call them one by one when a method is invoked by the 
