@@ -73,6 +73,10 @@ protected:
 	bool isEventAction, isRunAction, isStackingAction, isSteppingAction, isTrackingAction;
 	bool doEventBegin, doEventEnd, doRunBegin, doRunEnd, doStackStage, doStackEvent, doStackTrack, doTrackPre, doTrackPost;
 };
+
+/// \related Callback
+/// \brief 
+void create_callback(std::function<void()> func, std::set<Cycle> initCycle);
 	
 } // namespace ua 
 } // namespace gex 

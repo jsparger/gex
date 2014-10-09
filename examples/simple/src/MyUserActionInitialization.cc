@@ -49,25 +49,32 @@ Build() const
 	// Create a SourceConfig and let the UserActionManager adopt it. We do this because we need the distributions in our SourceConfig to live for the duration of the simulation. If the UserActionManager did not adopt the SourceConfig, it would be deleted at the end of this Build() method.
 	SourceConfig* sourceConfig = uam->adopt(std::make_unique<SourceConfig>());
 	
+	// create a generic source using the distributions in our source configuration.
 	auto* source = new gex::pga::GenericSource(
 		&sourceConfig->monoEnergy,
 		&sourceConfig->isotropic,
 		&sourceConfig->pointSource,
 		&sourceConfig->singleParticle);
 	
-	// G4ThreeVector targetPosition(0,0,0);
-// 	double targetRadius = 3*m;
-// 	auto* source = new gex::pga::SphericalTarget(
-// 		targetPosition,
-// 		targetRadius,
-// 		&sourceConfig->monoEnergy,
-// 		&sourceConfig->pointSource,
-// 		&sourceConfig->singleParticle);
+	// TODO: Can UserActionManager do sources?
+	// give our source to geant4.
+	SetUserAction(source);
 }
 
 void BuildForMaster() const override
 {
-	// TODO: implement
+	// We will set the user actions for the master thread in this method.
+	
+	// -- Get the thread local UserActionManager:
+	auto* uam = ua::UserActionManager::GetUserActionManager();
+	
+	// -- Set up an action that will reset the clock at the beginning of each run.
+	// create a function to reset our clock.
+	clockptr = clock.get();
+	auto clockResetFcn = [clockptr] { clockptr->reset() };
+	
+	// register our clock reset function to be called at the beginning of
+	gex::ua::create_callback(clockResetFcn, {gex::ua::Cycle::RUN_BEGIN})
 }
 
 
