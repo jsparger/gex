@@ -15,7 +15,7 @@
 #include <gex/sd/TimeOfHitSD.hh>
 #include <gex/sd/PrimaryVertexSD.hh>
 #include <gex/ua/RootTreeManager.hh>
-#include <gex/data/DataGroup.hh>
+#include <gex/data/DataModuleGroup.hh>
 
 MySensitivizer::
 MySensitivizer(std::string f, std::string t, std::string b)
@@ -53,7 +53,7 @@ makeSensitive(G4LogicalVolume* vol)
 	auto rtm = ua::RootTreeManager::GetRootTreeManager(fileName);
 	
 	// Create the DataModuleGroup. Give it the sdGroup we want to read out and the name of the branch we want it to save data to in the TTree.
-	auto dataGroup = make_readout(sdGroup,branchName);
+	auto dataGroup = data::make_readout(sdGroup,branchName);
 	
 	// choose the sensitive detectors from the sdGroup whose data you want to save.
 	dataGroup->add(energy).add(time).add(primaryVertex);

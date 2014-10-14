@@ -8,10 +8,10 @@ class MyDetector : public gex::geom::Geometry
 public:
 	virtual ~MyDetector() {;}
 	virtual void construct(G4LogicalVolume* world) override;
-	virtual void constructSDAndField(sd::Sensitivizer*) override;
+	virtual void constructSDAndField(gex::sd::Sensitivizer*) override;
 	
 protected:
-	G4LogicalVolume* naiLog;
+	G4LogicalVolume* NaIDetector_logV;
 };
 
 #endif

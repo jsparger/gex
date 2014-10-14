@@ -12,16 +12,9 @@
 #define MY_USER_ACTION_INITIALIZATION_HH
 
 #include "G4VUserActionInitialization.hh"
-// #include "gex/ua/RootTreeManager.hh"
-// #include "gex/ua/Callback.hh"
-// #include "gex/ua/RunDataReset.hh"
-// #include "gex/pga/GenericSource.hh"
-// #include "gex/pga/SphericalTarget.hh"
 #include "gex/util/TSAccumulator.hh"
-// #include "G4ThreeVector.hh"
-// #include "G4RunManager.hh"
+#include <memory>
 #include <string>
-// #include <cmath>
 
 /// \class MyUserActionInitialization
 /// \brief An example user action initialization employing gex.

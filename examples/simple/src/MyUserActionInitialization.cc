@@ -11,7 +11,17 @@
 #include "MyUserActionInitialization.hh"
 
 #include "G4SystemOfUnits.hh"
-#include "gex/ua/UserActionManager.hh"
+#include "G4Gamma.hh"
+
+#include <gex/ua/UserActionManager.hh>
+#include <gex/ua/RootTreeManager.hh>
+#include <gex/ua/Callback.hh>
+#include <gex/pga/PointSource.hh>
+#include <gex/pga/Isotropic.hh>
+#include <gex/pga/MonoEnergyDist.hh>
+#include <gex/pga/SingleParticle.hh>
+#include <gex/pga/GenericSource.hh>
+#include <gex/create.hh>
 
 MyUserActionInitialization::
 MyUserActionInitialization(const std::string& fname, std::unique_ptr<ClockType> c)
@@ -47,7 +57,7 @@ Build() const
 	};
 	
 	// Create a SourceConfig and let the UserActionManager adopt it. We do this because we need the distributions in our SourceConfig to live for the duration of the simulation. If the UserActionManager did not adopt the SourceConfig, it would be deleted at the end of this Build() method.
-	auto* sourceConfig = gex::ua::create<SourceConfig>();
+	auto* sourceConfig = gex::create<SourceConfig>();
 	
 	// create a generic source using the distributions in our source configuration.
 	auto* source = new gex::pga::GenericSource(
@@ -61,20 +71,20 @@ Build() const
 	SetUserAction(source);
 }
 
-void BuildForMaster() const override
+void 
+MyUserActionInitialization::
+BuildForMaster() const
 {
+	using namespace gex;
 	// We will set the user actions for the master thread in this method.
-	
-	// -- Get the thread local UserActionManager:
-	auto* uam = ua::UserActionManager::GetUserActionManager();
 	
 	// -- Set up an action that will reset the clock at the beginning of each run.
 	// create a function to reset our clock.
 	auto clockptr = clock.get();
-	auto clockResetFcn = [clockptr] { clockptr->reset() };
+	auto clockResetFcn = [clockptr] { clockptr->reset(); };
 	
-	// register our clock reset function to be called at the beginning of
-	gex::ua::create<Callback>(clockResetFcn, {gex::ua::Cycle::RUN_BEGIN});
+	// register our clock reset function to be called at the beginning of each run.
+	gex::create<ua::Callback>(clockResetFcn, std::set<ua::Cycle>{gex::ua::Cycle::RUN_BEGIN});
 }
 
 

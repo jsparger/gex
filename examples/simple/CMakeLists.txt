@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # NOTE: [^.]*.cc means match all files ending in .cc
 # 	except those that start with a "." (period) (hidden)
 
-set(SRC_DIR ${PROJECT_SOURCE_DIR}/src/gex)
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE sources  
 	${SRC_DIR}/[^.]*.cc 
 	${SRC_DIR}/[^.]*.cpp 
@@ -20,8 +20,7 @@ file(GLOB_RECURSE sources
 	${SRC_DIR}/[^.]*.c
 )
 
-set(INC_DIR ${PROJECT_SOURCE_DIR}/include/gex)
-add_definitions(-DGEX_INCLUDE_DIR=${INC_DIR})
+set(INC_DIR ${PROJECT_SOURCE_DIR}/include)
 file(GLOB_RECURSE headers 
 	${INC_DIR}/[^.]*.hh 
 	${INC_DIR}/[^.]*.h 
@@ -59,11 +58,12 @@ include_directories( ${ROOT_INCLUDE_DIR} )
 
 # Set up Gex
 #----------------------------------------------------------------------------
-include_directories(${GEX_INCLUDE_DIR})
+include_directories($ENV{GEX_INCLUDE_DIR})
 
 # Set up executable
 #----------------------------------------------------------------------------
 set(CMAKE_CXX_FLAGS "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -pipe -ftls-model=initial-exec -pthread -std=c++14")
 add_executable(${target} main.cc ${sources} ${dictionaries} ${headers})
-
-target_link_libraries(target ${GEX_LIBS})
+target_link_libraries(${target} ${Geant4_LIBRARIES})
+target_link_libraries(${target} ${ROOT_LIBRARIES})
+target_link_libraries(${target} $ENV{GEX_LIBS})

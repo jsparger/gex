@@ -22,7 +22,7 @@ file(GLOB_RECURSE sources
 )
 
 set(INC_DIR ${PROJECT_SOURCE_DIR}/include/gex)
-add_definitions(-DGEX_INCLUDE_DIR=${INC_DIR})
+add_definitions(-DGEX_INCLUDE_DIR=${PROJECT_SOURCE_DIR}/include)
 file(GLOB_RECURSE headers 
 	${INC_DIR}/[^.]*.hh 
 	${INC_DIR}/[^.]*.h 

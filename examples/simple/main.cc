@@ -17,7 +17,6 @@
 #include <gex/geom/GeometryManager.hh>
 #include <gex/geom/BoxWorld.hh>
 
-#include "MyConcreteSlab.hh"
 #include "MyDetector.hh"
 #include "MySensitivizer.hh"
 #include "MyUserActionInitialization.hh"
@@ -42,7 +41,7 @@ int main()
 	
 	// create our custom sensitivizer
 	std::string fileName = "../output/simple";
-	auto sens = new MySensitivizer(fileName,"tree");
+	auto sens = new MySensitivizer(fileName,"tree","data");
 	
 	// Create our world volume.
 	gex::geom::BoxWorld bw(300*m,50*m,100*m);
@@ -52,7 +51,7 @@ int main()
 	// next, we add the geometry elements we want in our world volume. In this case we add a custom built detector and a custom built concrete slab.
 	auto geometryManager = new gex::geom::GeometryManager(world,sens);
 	geometryManager->addGeometry(std::make_unique<MyDetector>());
-	geometryManager->addGeometry(std::make_unique<MyConcreteSlab>());
+	//geometryManager->addGeometry(std::make_unique<MyConcreteSlab>());
 	
 	// set up the simulation:
 	// - let our geometry manager be the detector construction
@@ -62,7 +61,7 @@ int main()
 	sim.setDetectorConstruction(geometryManager);
 	sim.setPhysicsList(new QGSP_BIC());
 	sim.setUserActionInitialization(new MyUserActionInitialization(fileName, std::move(clock)));
-	sim.setNumberOfEvents(1e9);
+	sim.setNumberOfEvents(1e3);
 	
 	// initialize the simulation.
 	sim.initialize();
@@ -78,7 +77,7 @@ int main()
 	}
 	
 	// uncomment the line below to visualize 100 events
-	//sim.visualize(100,true);
+	sim.visualize(100,true);
 	
 	std::cout << "simulation complete!\n";
 }

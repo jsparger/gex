@@ -87,7 +87,7 @@ struct NamedData : public IData
 	static std::vector<std::string> GetDictionaryHeaders()
 	{
 		std::vector<std::string> headers = IData::GetDictionaryHeaders();
-		headers.push_back("gex/util/type_erasure.hh");
+		//headers.push_back("gex/util/type_erasure.hh");
 		headers.push_back("gex/util/value_ptr.hh");
 		headers.push_back("map");
 		headers.push_back(__FILE__);

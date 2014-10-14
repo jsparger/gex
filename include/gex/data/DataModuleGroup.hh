@@ -22,6 +22,7 @@ namespace gex {
 //forward declaration of SDGroup
 namespace sd { class SDGroup; }
 
+/// The data namespace.
 namespace data {
 
 /// \class DataModuleGroup
@@ -59,6 +60,10 @@ protected:
 	std::vector<DataModule*> moduleVec;
 	std::vector<std::unique_ptr<DataModule>> ownedModuleVec;
 };
+
+/// \related DataModuleGroup
+/// \brief make a DataGroup which will write to the Branch \p branchName and associate it with the given SDGroup.
+DataModuleGroup* make_readout(sd::SDGroup* sdGroup, std::string branchName);
 	
 } // namespace data 
 } // namespace gex 
