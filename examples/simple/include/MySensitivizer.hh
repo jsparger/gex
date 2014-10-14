@@ -16,13 +16,12 @@
 class MySensitivizer : public gex::sd::Sensitivizer
 {
 public:
-	MySensitivizer(const std::string fileName, const std::string treeName);
+	MySensitivizer(std::string fileName, std::string treeName, std::string branchName);
 	virtual ~MySensitivizer() {;}
-	
 	virtual void makeSensitive(G4LogicalVolume* vol) override;
 
-private:
-	/* data */
+protected:
+	std::string fileName, treeName, branchName;
 };
 
 #endif

@@ -12,11 +12,13 @@
 #define GEX_SD_SDGROUP 
 
 #include "G4VSensitiveDetector.hh"
+#include "G4SDManager.hh"
 #include "gex/data/DataModuleGroup.hh"
 #include <vector>
 #include <memory>
 
 namespace gex {
+/// The sd namespace.
 namespace sd {
 
 /// \class SDGroup
@@ -52,6 +54,11 @@ protected:
 	std::vector<G4VSensitiveDetector*> sdVec;
 	std::vector<std::unique_ptr<G4VSensitiveDetector>> ownedSDVec;
 };
+
+// \related SDGroup
+// \brief Create a SDGroup, assign it to the volume, and register it with Geant4. Name must be unique.
+SDGroup* make_sensitive(G4LogicalVolume* vol, std::string name);
+
 	
 } // namespace sd 	
 } // namespace gex 

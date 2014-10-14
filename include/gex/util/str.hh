@@ -15,12 +15,24 @@
 #include <sstream>
 
 namespace gex {
+
+/// The util namespace
 namespace util {
 
+/// \brief Converts arguments to strings using std::stringstream and concatenates them.
+///
+/// Example usage:
+/// \code{.cpp}
+/// std::cout << gex::util::str("std::stringstream takes ", 3, "lines, but this takes just", 1, "!") << "\n";
+/// \endcode
 template<class... Args>
 std::string
 str(Args&&... args)
 {
+	// For me later wondering how this works, see http://en.cppreference.com/w/cpp/language/parameter_pack and look at "Braced init lists". You can use them to call a function on each element of a parameter pack in order. The expression (ss << args, 0) works as a result of the comma operator (who knew?). 
+	// Example 1: a = b, c;    // a is set to the value of b!
+	// Example 2: a = (b, c);  // a is set to the value of c!
+	// Read about it here: http://stackoverflow.com/questions/54142/how-does-the-comma-operator-work
 	std::stringstream ss;
 	int unpack[]{(ss << args, 0)...};
 	return ss.str();

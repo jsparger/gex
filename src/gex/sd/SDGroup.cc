@@ -17,6 +17,14 @@
 
 namespace gex {
 namespace sd {
+	
+SDGroup* make_sensitive(G4LogicalVolume* vol, std::string name)
+{
+	auto sdGroup = std::make_unique<SDGroup>(name);
+	vol->SetSensitiveDetector(sdGroup.get());
+	G4SDManager::GetSDMpointer()->AddNewDetector(sdGroup.get());
+	return sdGroup.release();
+}
 
 SDGroup::
 SDGroup( G4String name )

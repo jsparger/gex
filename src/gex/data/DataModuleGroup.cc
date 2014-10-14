@@ -16,10 +16,21 @@
 #include "gex/ua/UserActionManager.hh"
 #include "gex/ua/RunDataRegistration.hh"
 #include "gex/util/Access.hh"
+#include "gex/sd/SDGroup.hh"
+#include "gex/create.hh"
+#include "gex/ua/Callback.hh"
 #include <iostream>
 
 namespace gex {
 namespace data {
+	
+DataModuleGroup* make_readout(sd::SDGroup* sdGroup, std::string branchName)
+{
+	auto dataGroup = gex::create<data::DataModuleGroup>(branchName);
+	gex::create<ua::Callback>([dataGroup]{dataGroup->reset();}, std::set<ua::Cycle>{ua::Cycle::EVENT_BEGIN});
+	sdGroup->inform(dataGroup);
+	return dataGroup;
+}
 
 DataModuleGroup::
 DataModuleGroup(const std::string& n)

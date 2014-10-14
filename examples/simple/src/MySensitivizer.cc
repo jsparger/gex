@@ -9,11 +9,19 @@
 //---------------------------------------------------------------------------//
 
 #include "MySensitivizer.hh"
+#include <gex/create.hh>
+#include <gex/sd/SDGroup.hh>
+#include <gex/sd/EnergyDepSD.hh>
+#include <gex/sd/TimeOfHitSD.hh>
+#include <gex/sd/PrimaryVertexSD.hh>
+#include <gex/ua/RootTreeManager.hh>
+#include <gex/data/DataGroup.hh>
 
 MySensitivizer::
-MySensitivizer(const std::string fileName, const std::string treeName)
+MySensitivizer(std::string f, std::string t, std::string b)
+	: fileName(f), treeName(t), branchName(b)
 {
-	// TODO: implement
+	// do nothing else
 }
 
 void 
@@ -25,12 +33,12 @@ makeSensitive(G4LogicalVolume* vol)
 	// We only want to make sensitive detectors for the worker threads.
 	if (false == G4Threading::IsWorkerThread()) { return; }
 	
-	// --Set up our sensitive detectors. This is how we get data from our simulation.
+	// --Set up our sensitive detectors. This is how we extract data from our simulation.
+	//
+	// Create an SDGroup and attach it to the volume.
+	auto sdGroup = gex::sd::make_sensitive(vol, "sdGroup");
 	
-	// Create an SDGroup and attach it to the volume. We don't use gex::create in this special case because we need to let Geant4 handle memory management.
-	auto sdGroup = gex::sd::make_sensitive(vol);
-	
-	// Create the job-specific sensitive detectors we want. In this case we are going to read out the total energy deposited in the volume, the time of the first interaction, and information about the original source particle. Note that PrimaryVertexSD is also a type of UserAction. The function ua::create handles its registration automagically.
+	// Create the job-specific sensitive detectors we want. In this case we are going to read out the total energy deposited in the volume, the time of the first interaction, and information about the original source particle. Note that PrimaryVertexSD is also a type of UserAction. The function gex::create handles its registration automagically.
 	auto energy = gex::create<sd::EnergyDepSD>("energy");
 	auto time = gex::create<sd::TimeOfHitSD>("time");
 	auto primaryVertex = gex::create<sd::PrimaryVertexSD>("primaryVertex");
@@ -40,31 +48,23 @@ makeSensitive(G4LogicalVolume* vol)
 	
 	
 	// --Set up our DataModuleGroup. This is how we save the data from our simulation to disk.
-	
-	// Create the DataModuleGroup. 
-	auto dataGroup = gex::create<data::DataModuleGroup>("dataGroup");
-	
-	// choose the sensitive detectors whose data you want to save.
-	dataGroup->add(energy).add(time).add(primaryVertex);
-	
-	// get RootTreeManager for the ROOT file specified by fileName.
+	//
+	// Get RootTreeManager for the ROOT file specified by fileName. The following lines of code will set up our simulation to write data to a TTree in this file. 
 	auto rtm = ua::RootTreeManager::GetRootTreeManager(fileName);
 	
-	// register the data group with the Root Tree Manager and give it the name of the tree we want to save the data in. Also tell the sdGroup to update the dataGroup.  This will do a few things:
-	// 1) cause a TFile with a TTree containing the data to be written for every run.
-	// 2) cause the TTree specified by treeName to only be filled for events where the volume has a hit.
-	// 3) cause a ROOT dictionary library to be generated.
+	// Create the DataModuleGroup. Give it the sdGroup we want to read out and the name of the branch we want it to save data to in the TTree.
+	auto dataGroup = make_readout(sdGroup,branchName);
+	
+	// choose the sensitive detectors from the sdGroup whose data you want to save.
+	dataGroup->add(energy).add(time).add(primaryVertex);
+
+	// Register the data group with the Root Tree Manager and give it the name of the tree we want to save the data in. **This line must be invoked AFTER selecting the sensitive detectors you want read out.**
 	dataGroup->registerWith(rtm, treeName);
-	sdGroup->inform(dataGroup);
 	
-	// TODO: write a function like this:
-	// std::string name = gex::util::str(3,"dog","america",5);
-	
-	// generate a callback that will be invoked at the beginning of every event to reset the
-	// dataGroup.
-	gex::create<ua::Callback>([dataGroup]{dataGroup->reset();}, {ua::Cycle::EVENT_BEGIN}));
-	
-	++sdnum;
+	// We have accomplished a few things:
+	// 1) A separate TFile with a TTree containing the simulation data will be written for every thread for every run. As an example, the 3rd thread on the 2nd run will write to a file called fileName_run2_tr3.root which will contain a TTree called treeName with a branch called branchName.
+	// 2) We have set up the TTree called treename to fill only for events where the sdGroup volume has a hit.
+	// 3) We cause a ROOT dictionary library to be generated. We will need this to be able to read the data out later.
 }
 
 

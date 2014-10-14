@@ -18,6 +18,10 @@
 #include <vector>
 
 namespace gex {
+
+//forward declaration of SDGroup
+namespace sd { class SDGroup; }
+
 namespace data {
 
 /// \class DataModuleGroup

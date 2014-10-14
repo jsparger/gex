@@ -26,16 +26,9 @@ template <typename T>
 class LifetimeExtension : public UserAction
 {
 public:
-	/// Constructor for std::unique_ptr
-	LifetimeExtension(std::unique_ptr<T> data)
-		: uniqueData(std::move(data))
-	{
-		// do nothing else
-	}
 	
-	/// Constructor for std::shared_ptr
-	LifetimeExtension(std::shared_ptr<T> data)
-		: sharedData(std::move(data))
+	LifetimeExtension(T data)
+		: data(std::move(data))
 	{
 		// do nothing else
 	}
@@ -49,8 +42,7 @@ public:
 	}
 	
 protected:
-	std::unique_ptr<T> uniqueData;
-	std::shared_ptr<T> sharedData;
+	T data;
 };
 	
 } // namespace ua

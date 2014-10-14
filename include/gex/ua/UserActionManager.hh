@@ -74,7 +74,7 @@ public:
 	T* adopt(std::unique_ptr<T> obj)
 	{
 		T* rawPointer = obj.get();
-		this->registerAction(std::make_unique<LifetimeExtension<T>>(std::move(obj)));
+		this->registerAction(std::make_unique<LifetimeExtension<decltype(obj)>>(std::move(obj)));
 		return rawPointer;
 	}
 	
