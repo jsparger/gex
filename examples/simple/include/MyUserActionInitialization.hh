@@ -12,7 +12,8 @@
 #define MY_USER_ACTION_INITIALIZATION_HH
 
 #include "G4VUserActionInitialization.hh"
-#include "gex/util/TSAccumulator.hh"
+#include <gex/util/TSAccumulator.hh>
+#include <gex/ua/UserActionManager.hh>
 #include <memory>
 #include <string>
 

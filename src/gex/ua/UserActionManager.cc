@@ -15,7 +15,7 @@
 namespace gex {
 namespace ua {
 
-thread_local std::unique_ptr<UserActionManager> UserActionManager::theInstance = nullptr; 
+thread_local UserActionManager* UserActionManager::theInstance = nullptr;
 
 UserActionManager*
 UserActionManager::
@@ -23,10 +23,11 @@ GetUserActionManager()
 {
 	if (nullptr == theInstance)
 	{
-		theInstance.reset(new UserActionManager());
+		theInstance = new UserActionManager();
 	}
 	
-	return theInstance.get();
+	//return theInstance.get();
+	return theInstance;
 }
 
 UserActionManager::

@@ -93,7 +93,7 @@ protected:
 	StackingActionGroup* stackGroup;
 	SteppingActionGroup* stepGroup;
 	TrackingActionGroup* trackingGroup;
-	thread_local static std::unique_ptr<UserActionManager> theInstance;
+	static thread_local UserActionManager* theInstance;
 	friend std::unique_ptr<UserActionManager>::deleter_type;
 };
 

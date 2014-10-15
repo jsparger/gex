@@ -16,6 +16,8 @@
 #include <gex/sd/PrimaryVertexSD.hh>
 #include <gex/ua/RootTreeManager.hh>
 #include <gex/data/DataModuleGroup.hh>
+#include <gex/util/str.hh>
+#include "G4Threading.hh"
 
 MySensitivizer::
 MySensitivizer(std::string f, std::string t, std::string b)
@@ -36,6 +38,7 @@ makeSensitive(G4LogicalVolume* vol)
 	// --Set up our sensitive detectors. This is how we extract data from our simulation.
 	//
 	// Create an SDGroup and attach it to the volume.
+	std::string sdName = gex::util::str("sdGroup", G4Threading::G4GetThreadId());
 	auto sdGroup = gex::sd::make_sensitive(vol, "sdGroup");
 	
 	// Create the job-specific sensitive detectors we want. In this case we are going to read out the total energy deposited in the volume, the time of the first interaction, and information about the original source particle. Note that PrimaryVertexSD is also a type of UserAction. The function gex::create handles its registration automagically.
