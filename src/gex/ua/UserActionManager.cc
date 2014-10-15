@@ -16,7 +16,6 @@ namespace gex {
 namespace ua {
 
 thread_local UserActionManager* UserActionManager::theInstance = nullptr;
-
 UserActionManager*
 UserActionManager::
 GetUserActionManager()
@@ -26,7 +25,6 @@ GetUserActionManager()
 		theInstance = new UserActionManager();
 	}
 	
-	//return theInstance.get();
 	return theInstance;
 }
 

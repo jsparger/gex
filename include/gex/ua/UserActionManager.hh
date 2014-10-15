@@ -83,7 +83,7 @@ protected:
 	UserActionManager();
 	
 	/// Destructor
-	virtual ~UserActionManager() {;}
+	virtual ~UserActionManager() {std::cout << "UAM destructor called!\n";}
 
 protected:
 	std::vector<std::unique_ptr<UserAction>> actionVec;
@@ -94,7 +94,7 @@ protected:
 	SteppingActionGroup* stepGroup;
 	TrackingActionGroup* trackingGroup;
 	static thread_local UserActionManager* theInstance;
-	friend std::unique_ptr<UserActionManager>::deleter_type;
+	//friend std::unique_ptr<UserActionManager>::deleter_type;
 };
 
 // These are classes for use only by UserActionManager. They hold the modular
