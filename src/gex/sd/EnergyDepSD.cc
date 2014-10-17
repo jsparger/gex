@@ -27,7 +27,7 @@ EnergyDepSD::
 ProcessHits(G4Step* step, G4TouchableHistory*)
 {
 	data->energy += step->GetTotalEnergyDeposit();
-	//std::cout << "data->energy = " << data->energy << "\n";
+	// std::cout << "data->energy = " << data->energy << "\n";
 	return false;
 }
 

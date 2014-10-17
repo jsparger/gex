@@ -48,9 +48,9 @@ Build() const
 	
 	// -- Build the source:
 	
-	// Create a struct to hold all the distributions for our source. Initialize the distributions as we like. In this case, we create an isotropic point source at the origin which emits 0.5 MeV gamma rays. 
+	// Create a struct to hold all the distributions for our source. Initialize the distributions as we like. In this case, we create an isotropic point source at 1 meter down the x-axis which emits 0.5 MeV gamma rays. 
 	struct SourceConfig {
-		gex::pga::PointSource pointSource = {G4ThreeVector(0,0,0)};
+		gex::pga::PointSource pointSource = {G4ThreeVector(1*m,0,0)};
 		gex::pga::Isotropic isotropic;
 		gex::pga::MonoEnergyDist monoEnergy = {0.5*MeV};
 		gex::pga::SingleParticle singleParticle = {G4Gamma::Definition()};

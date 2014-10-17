@@ -19,7 +19,7 @@ construct(G4LogicalVolume* world)
 	NaIDetector_logV = new G4LogicalVolume(NaIDetector_solid, nistMan->FindOrBuildMaterial("G4_SODIUM_IODIDE"), "naiLog");
 	
 	// Place the sodium iodide detector at the origin.
-	new G4PVPlacement(0, G4ThreeVector(0,0,0), NaIDetector_logV, "naiPhys", world, false,	0);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0), NaIDetector_logV, "naiPhys", world, false, 0);
 }
 
 void

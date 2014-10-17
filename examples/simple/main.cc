@@ -60,14 +60,14 @@ int main()
 	sim.setDetectorConstruction(geometryManager);
 	sim.setPhysicsList(new QGSP_BIC());
 	sim.setUserActionInitialization(new MyUserActionInitialization(fileName, std::move(clock)));
-	sim.setNumberOfEvents(1e3);
+	sim.setNumberOfEvents(1e6);
 
 	// initialize the simulation.
 	sim.initialize();
 
 	// Now let's run it! simulate 5 runs.
 	// Each call to execute performs a run.
-	unsigned int numRuns = 5;
+	unsigned int numRuns = 1;
 	for (unsigned int i = 0; i < numRuns; ++i)
 	{
 		std::cout << "Run " << i << "/" << numRuns << "...";

@@ -13,11 +13,11 @@
 #include <gex/sd/SDGroup.hh>
 #include <gex/sd/EnergyDepSD.hh>
 #include <gex/sd/TimeOfHitSD.hh>
-#include <gex/sd/PrimaryVertexSD.hh>
 #include <gex/ua/RootTreeManager.hh>
 #include <gex/data/DataModuleGroup.hh>
 #include <gex/util/str.hh>
 #include "G4Threading.hh"
+#include <iostream>
 
 MySensitivizer::
 MySensitivizer(std::string f, std::string t, std::string b)
@@ -32,23 +32,21 @@ makeSensitive(G4LogicalVolume* vol)
 {
 	using namespace gex;
 	
-	// We only want to make sensitive detectors for the worker threads.
-	if (false == G4Threading::IsWorkerThread()) { return; }
-	
 	// --Set up our sensitive detectors. This is how we extract data from our simulation.
 	//
 	// Create an SDGroup and attach it to the volume.
-	std::string sdName = gex::util::str("sdGroup", G4Threading::G4GetThreadId());
+	// We need to do this for all threads including master.
 	auto sdGroup = gex::sd::make_sensitive(vol, "sdGroup");
+	
+	// Only configure sensitive detectors and readot for the worker threads. Geant4 will complain otherwise. 
+ 	if (false == G4Threading::IsWorkerThread()) { return; }
 	
 	// Create the job-specific sensitive detectors we want. In this case we are going to read out the total energy deposited in the volume, the time of the first interaction, and information about the original source particle. Note that PrimaryVertexSD is also a type of UserAction. The function gex::create handles its registration automagically.
 	auto energy = gex::create<sd::EnergyDepSD>("energy");
 	auto time = gex::create<sd::TimeOfHitSD>("time");
-	auto primaryVertex = gex::create<sd::PrimaryVertexSD>("primaryVertex");
 	
 	// add the sensitive detectors to the group.
-	sdGroup->add(energy).add(time).add(primaryVertex);
-	
+	sdGroup->add(energy).add(time);
 	
 	// --Set up our DataModuleGroup. This is how we save the data from our simulation to disk.
 	//
@@ -59,7 +57,7 @@ makeSensitive(G4LogicalVolume* vol)
 	auto dataGroup = data::make_readout(sdGroup,branchName);
 	
 	// choose the sensitive detectors from the sdGroup whose data you want to save.
-	dataGroup->add(energy).add(time).add(primaryVertex);
+	dataGroup->add(energy).add(time);
 
 	// Register the data group with the Root Tree Manager and give it the name of the tree we want to save the data in. **This line must be invoked AFTER selecting the sensitive detectors you want read out.**
 	dataGroup->registerWith(rtm, treeName);
@@ -68,6 +66,8 @@ makeSensitive(G4LogicalVolume* vol)
 	// 1) A separate TFile with a TTree containing the simulation data will be written for every thread for every run. As an example, the 3rd thread on the 2nd run will write to a file called fileName_run2_tr3.root which will contain a TTree called treeName with a branch called branchName.
 	// 2) We have set up the TTree called treename to fill only for events where the sdGroup volume has a hit.
 	// 3) We cause a ROOT dictionary library to be generated. We will need this to be able to read the data out later.
+	
+	std::cout << "now sensitive?...\n";
 }
 
 
