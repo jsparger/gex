@@ -67,7 +67,7 @@ int main()
 
 	// Now let's run it! simulate 5 runs.
 	// Each call to execute performs a run.
-	unsigned int numRuns = 1;
+	unsigned int numRuns = 5;
 	for (unsigned int i = 0; i < numRuns; ++i)
 	{
 		std::cout << "Run " << i << "/" << numRuns << "...";

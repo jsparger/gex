@@ -47,6 +47,7 @@ Geant4Simulation(bool isMultiThreaded, unsigned int nt)
 		G4MTRunManager* rm = new G4MTRunManager();
 		rm->SetNumberOfThreads(numThreads);
 		runManager = std::unique_ptr<G4RunManager>(rm);
+		//runManager->SetUserInitialization(new GexWorkerInitialization());
 	}
 	else
 	{

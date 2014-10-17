@@ -78,12 +78,16 @@ public:
 		return rawPointer;
 	}
 	
+	virtual void shutDown();
+	
+	/// Destructor
+	virtual ~UserActionManager(); 
+	
 protected:
 	/// Constructor. Use GetUserActionManager() to obtain an instance.
 	UserActionManager();
 	
-	/// Destructor
-	virtual ~UserActionManager() {std::cout << "UAM destructor called!\n";}
+	virtual void initialize();
 
 protected:
 	std::vector<std::unique_ptr<UserAction>> actionVec;
@@ -93,8 +97,7 @@ protected:
 	StackingActionGroup* stackGroup;
 	SteppingActionGroup* stepGroup;
 	TrackingActionGroup* trackingGroup;
-	static thread_local UserActionManager* theInstance;
-	//friend std::unique_ptr<UserActionManager>::deleter_type;
+	bool initialized;
 };
 
 // These are classes for use only by UserActionManager. They hold the modular
@@ -126,6 +129,7 @@ private:
 	typedef std::vector<G4UserRunAction*> UserActionVec;
 	UserActionVec actionList;
 	RunActionGroup(){;}
+	virtual ~RunActionGroup();
 public:
 	G4Run* GenerateRun();
 	void BeginOfRunAction(const G4Run* run) override;

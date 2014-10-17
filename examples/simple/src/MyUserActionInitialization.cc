@@ -77,12 +77,12 @@ BuildForMaster() const
 {
 	using namespace gex;
 	// We will set the user actions for the master thread in this method.
-	
+
 	// -- Set up an action that will reset the clock at the beginning of each run.
 	// create a function to reset our clock.
 	auto clockptr = clock.get();
 	auto clockResetFcn = [clockptr] { clockptr->reset(); };
-	
+
 	// register our clock reset function to be called at the beginning of each run.
 	gex::create<ua::Callback>(clockResetFcn, std::set<ua::Cycle>{gex::ua::Cycle::RUN_BEGIN});
 }

@@ -15,16 +15,17 @@
 namespace gex {
 namespace ua {
 
-thread_local UserActionManager* UserActionManager::theInstance = nullptr;
+static thread_local UserActionManager* theInstance = nullptr;
+
 UserActionManager*
 UserActionManager::
 GetUserActionManager()
 {
-	if (nullptr == theInstance)
+	if (!theInstance)
 	{
 		theInstance = new UserActionManager();
+		theInstance->initialize();
 	}
-	
 	return theInstance;
 }
 
@@ -32,7 +33,23 @@ UserActionManager::
 UserActionManager()
 : 	eventGroup(nullptr), runGroup(nullptr),
 	stackGroup(nullptr), stepGroup(nullptr),
-	trackingGroup(nullptr)
+	trackingGroup(nullptr), initialized(false)
+{
+	// do nothing else
+}
+
+UserActionManager::
+~UserActionManager()
+{
+	std::cout << "UAM destructor called!\n"; 
+	actionVec.clear(); 
+	masterRunActionVec.clear(); 
+	std::cout << "UAM destructor finished.\n";
+}
+
+void
+UserActionManager::
+initialize()
 {
 	// TODO: review this...
 	// This could fix a future bug...
@@ -49,6 +66,15 @@ UserActionManager()
 	}
 	runGroup = new RunActionGroup();
 	G4RunManager::GetRunManager()->SetUserAction(runGroup);
+	initialized = true;
+}
+
+void
+UserActionManager::
+shutDown()
+{
+	actionVec.clear();
+	masterRunActionVec.clear();
 }
 
 void
@@ -160,6 +186,14 @@ EndOfEventAction(const G4Event* arg)
 	{
 		action->EndOfEventAction(arg);
 	}
+}
+
+RunActionGroup::
+~RunActionGroup()
+{
+	// This is kind of a hack to free up the static thread_local UserActionManager instance at the appropriate time.
+	// The RunAction is one of the last things Geant4 destroys. It is followed only by the primary generator action.
+	if (theInstance) { delete theInstance; }
 }
 
 G4Run*
