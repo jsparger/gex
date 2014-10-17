@@ -11,16 +11,26 @@
 #include "gex/ua/UserActionManager.hh"
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
+#include <stdexcept>
 
 namespace gex {
 namespace ua {
 
 static thread_local UserActionManager* theInstance = nullptr;
+static thread_local bool destroyed = false;
 
 UserActionManager*
 UserActionManager::
 GetUserActionManager()
 {
+	if (destroyed)
+	{
+		throw std::runtime_error(
+			"Error: gex::ua:UserActionManager::GetUserActionManager() called after UserActionManager has been destroyed. "
+			"This most likely means you called GetUserActionManager() from the destructor of your PrimaryGeneratorAction or "
+			"after the G4RunManager was destroyed.");
+	}
+	
 	if (!theInstance)
 	{
 		theInstance = new UserActionManager();
@@ -193,7 +203,11 @@ RunActionGroup::
 {
 	// This is kind of a hack to free up the static thread_local UserActionManager instance at the appropriate time.
 	// The RunAction is one of the last things Geant4 destroys. It is followed only by the primary generator action.
-	if (theInstance) { delete theInstance; }
+	if (theInstance) 
+	{ 
+		delete theInstance;
+		destroyed = true;
+	}
 }
 
 G4Run*
