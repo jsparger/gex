@@ -14,10 +14,10 @@ This project is being migrated to GitHub from a private repository. Here is the 
 If you're here before the wiki but want to try Gex anyway, check out the simple example. To run the example, here are some things you'll need to do:
 
 - Source your geant4.sh and thisroot.sh scripts.
-- Build Gex: cd <path_to_gex>; mkdir build; cd build; cmake ..; make;
-- Set the environment variable GEX_LIBS=<path_to_gex>/build/libGex.[so/dylib]
-- Set the environment variable GEX_INCLUDE_DIR=<path_to_gex>/include
-- Build the example: cd <path_to_gex>/examples/simple; mkdir build; cd build; cmake ..; make; ./simple;
+- Build Gex: cd [path_to_gex]; mkdir build; cd build; cmake ..; make;
+- Set the environment variable GEX_LIBS=[path_to_gex]/build/libGex.[so/dylib]
+- Set the environment variable GEX_INCLUDE_DIR=[path_to_gex]/include
+- Build the example: cd [path_to_gex]/examples/simple; mkdir build; cd build; cmake ..; make; ./simple;
 
 To build and run, Gex requires:
 
