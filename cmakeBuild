@@ -1,0 +1,4 @@
+mkdir -p build;
+cd build;
+cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc -DGeant4_DIR=`geant4-config --prefix` ..
+# -DGEANT4_INSTALL_DATADIR=/home/dualimager/local/geant4/geant4.10.0-install/share/Geant4-10.0.0/data/

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+INCLUDE_FILE=./include/$1.hh
+touch $INCLUDE_FILE
+git add $INCLUDE_FILE
+
+SRC_FILE=./src/$1.cc
+touch $SRC_FILE
+git add $SRC_FILE
