@@ -75,7 +75,7 @@ public:
 	void buildDictionary();
 	
 protected:
-	RootDictionaryBuilder() {;}	
+	RootDictionaryBuilder();
 	virtual ~RootDictionaryBuilder() {;}
 	
 	void addToDictionary(std::vector<std::string> typeVec, std::vector<std::string> headerVec);
@@ -90,6 +90,7 @@ protected:
 	static std::set<std::string> headerSet;
 	static std::vector<std::string> typeVec;
 	static std::vector<std::string> headerVec;
+	static std::string gex_include_dir;
 	static bool dictionaryBuilt;
 	
 };

@@ -11,6 +11,8 @@
 #include "gex/data/RootDictionaryBuilder.hh"
 #include "gex/data/IData.hh"
 #include <sstream>
+#include <cstdlib>
+#include <stdexcept>
 
 namespace gex {
 namespace data {
@@ -22,6 +24,7 @@ std::set<std::string> RootDictionaryBuilder::headerSet;
 std::vector<std::string> RootDictionaryBuilder::typeVec;
 std::vector<std::string> RootDictionaryBuilder::headerVec;
 bool RootDictionaryBuilder::dictionaryBuilt = false;
+std::string RootDictionaryBuilder::gex_include_dir = "";
 
 RootDictionaryBuilder*
 RootDictionaryBuilder::
@@ -35,6 +38,21 @@ GetRootDictionaryBuilder()
 	}
 	
 	return theInstance.get();
+}
+
+RootDictionaryBuilder::
+RootDictionaryBuilder()
+{
+	if (const char* env = std::getenv("GEX_INCLUDE_DIR"))
+	{
+		gex_include_dir = std::string(env);
+	}
+	else
+	{
+		std::string msg = "RootDictionaryBuilder::RootDictionaryBuilder(): Error! Environment variable GEX_INCLUDE_DIR not set!";
+		std::cerr << msg << "\n";
+		throw std::runtime_error(msg);
+	}
 }
 
 void
@@ -110,8 +128,8 @@ buildDictionary()
 	
 		std::lock_guard<std::mutex> lock(util::RootLock::MUTEX);
 		std::cout << "types = " << types << "\n" << "headers = " << headers << "\n";
-		std::cout << "INC_DIR = " << STRINGIFY(GEX_INCLUDE_DIR) << "\n";
-		gInterpreter->AddIncludePath(STRINGIFY(GEX_INCLUDE_DIR));
+		std::cout << "GEX_INCLUDE_DIR = " << gex_include_dir << "\n";
+		gInterpreter->AddIncludePath(gex_include_dir.c_str());
 	
 		int returnVal = gInterpreter->GenerateDictionary(types.c_str(),headers.c_str());
 		if (0 == returnVal)
