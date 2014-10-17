@@ -34,7 +34,6 @@ GetUserActionManager()
 	if (!theInstance)
 	{
 		theInstance = new UserActionManager();
-		theInstance->initialize();
 	}
 	return theInstance;
 }
@@ -43,23 +42,7 @@ UserActionManager::
 UserActionManager()
 : 	eventGroup(nullptr), runGroup(nullptr),
 	stackGroup(nullptr), stepGroup(nullptr),
-	trackingGroup(nullptr), initialized(false)
-{
-	// do nothing else
-}
-
-UserActionManager::
-~UserActionManager()
-{
-	std::cout << "UAM destructor called!\n"; 
-	actionVec.clear(); 
-	masterRunActionVec.clear(); 
-	std::cout << "UAM destructor finished.\n";
-}
-
-void
-UserActionManager::
-initialize()
+	trackingGroup(nullptr)
 {
 	// TODO: review this...
 	// This could fix a future bug...
@@ -76,15 +59,6 @@ initialize()
 	}
 	runGroup = new RunActionGroup();
 	G4RunManager::GetRunManager()->SetUserAction(runGroup);
-	initialized = true;
-}
-
-void
-UserActionManager::
-shutDown()
-{
-	actionVec.clear();
-	masterRunActionVec.clear();
 }
 
 void

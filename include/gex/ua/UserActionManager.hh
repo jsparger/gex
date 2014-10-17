@@ -77,18 +77,14 @@ public:
 		this->registerAction(std::make_unique<LifetimeExtension<decltype(obj)>>(std::move(obj)));
 		return rawPointer;
 	}
-	
-	virtual void shutDown();
-	
-	/// Destructor
-	virtual ~UserActionManager(); 
-	
+		
 protected:
 	/// Constructor. Use GetUserActionManager() to obtain an instance.
 	UserActionManager();
 	
-	virtual void initialize();
-
+	/// Destructor
+	virtual ~UserActionManager() {;} 
+	
 protected:
 	std::vector<std::unique_ptr<UserAction>> actionVec;
 	std::vector<std::unique_ptr<G4UserRunAction>> masterRunActionVec;
@@ -98,6 +94,8 @@ protected:
 	SteppingActionGroup* stepGroup;
 	TrackingActionGroup* trackingGroup;
 	bool initialized;
+	
+	friend class RunActionGroup;
 };
 
 // These are classes for use only by UserActionManager. They hold the modular

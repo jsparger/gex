@@ -35,6 +35,7 @@ str(Args&&... args)
 	// Read about it here: http://stackoverflow.com/questions/54142/how-does-the-comma-operator-work
 	std::stringstream ss;
 	int unpack[]{(ss << args, 0)...};
+	(void)unpack; // to prevent unused variable warning. (I sure hope this prevents optimization too.)
 	return ss.str();
 }
 
