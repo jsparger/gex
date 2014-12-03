@@ -11,9 +11,7 @@ public:
 	virtual void constructSDAndField(gex::sd::Sensitivizer*) override;
 	
 protected:
-	G4LogicalVolume* ej299_logV;
-	G4LogicalVolume* casing_logV;
-	
+	G4LogicalVolume* ej299_logV;	
 };
 
 #endif

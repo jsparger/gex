@@ -26,8 +26,8 @@ construct(G4LogicalVolume* world)
 	ej299->AddElement(manager->FindOrBuildElement(hydrogen), 19);
 	ej299->AddElement(manager->FindOrBuildElement(carbon), 18);
    
-	// Create casing logical volume. We store this as a member variable.
-	casing_logV = new G4LogicalVolume(casing_solid, nistMan->FindOrBuildMaterial("G4_ALUMINUM"), "casingLog");
+	// Create casing logical volume.
+	auto casing_logV = new G4LogicalVolume(casing_solid, nistMan->FindOrBuildMaterial("G4_ALUMINUM"), "casingLog");
    
 	// Create ej299 logical volume. We store this as a member variable.
 	ej299_logV = new G4LogicalVolume(ej299_solid, ej299, "ej299Log");
@@ -44,5 +44,5 @@ MyDetector::
 constructSDAndField(gex::sd::Sensitivizer* sens)
 {
 	// Make the sodium iodide detector sensitive.
-	sens->makeSensitive(NaIDetector_logV);
+	sens->makeSensitive(ej299_logV);
 }
