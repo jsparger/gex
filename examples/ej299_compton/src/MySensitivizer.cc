@@ -66,8 +66,6 @@ makeSensitive(G4LogicalVolume* vol)
 	// 1) A separate TFile with a TTree containing the simulation data will be written for every thread for every run. As an example, the 3rd thread on the 2nd run will write to a file called fileName_run2_tr3.root which will contain a TTree called treeName with a branch called branchName.
 	// 2) We have set up the TTree called treename to fill only for events where the sdGroup volume has a hit.
 	// 3) We cause a ROOT dictionary library to be generated. We will need this to be able to read the data out later.
-	
-	std::cout << "now sensitive?...\n";
 }
 
 

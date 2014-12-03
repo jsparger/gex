@@ -6,7 +6,7 @@
 #include "G4Box.hh"
 
 void 
-MyDetector::
+EJ299Detector::
 construct(G4LogicalVolume* world)
 {
 	// Get G4NistManager which makes the built-in G4 materials.
@@ -22,12 +22,12 @@ construct(G4LogicalVolume* world)
 	double density = 1.08*g/cm3;
 	int hydrogen = 1; //Hydrogen
 	int carbon = 6; //Carbon
-	auto ej299 = new G4Material("ej299", density, ncomponents=2);
-	ej299->AddElement(manager->FindOrBuildElement(hydrogen), 19);
-	ej299->AddElement(manager->FindOrBuildElement(carbon), 18);
+	auto ej299 = new G4Material("ej299", density, 2);
+	ej299->AddElement(nistMan->FindOrBuildElement(hydrogen), 19);
+	ej299->AddElement(nistMan->FindOrBuildElement(carbon), 18);
    
-	// Create casing logical volume.
-	auto casing_logV = new G4LogicalVolume(casing_solid, nistMan->FindOrBuildMaterial("G4_ALUMINUM"), "casingLog");
+	// Create casing logical volume made of aluminum.
+	auto casing_logV = new G4LogicalVolume(casing_solid, nistMan->FindOrBuildMaterial("G4_Al"), "casingLog");
    
 	// Create ej299 logical volume. We store this as a member variable.
 	ej299_logV = new G4LogicalVolume(ej299_solid, ej299, "ej299Log");
@@ -40,7 +40,7 @@ construct(G4LogicalVolume* world)
 }
 
 void
-MyDetector::
+EJ299Detector::
 constructSDAndField(gex::sd::Sensitivizer* sens)
 {
 	// Make the sodium iodide detector sensitive.
