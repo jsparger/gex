@@ -12,11 +12,20 @@ construct(G4LogicalVolume* world)
 	// Get G4NistManager which makes the built-in G4 materials.
 	G4NistManager* nistMan = G4NistManager::Instance();
 	
+	// size of scintillator
+	double ejWidth = 97.5*mm;
+	double ejDepth = 40*mm;
+	
+	// size of case.
+	double alThickness = 3*mm;
+	double caseWidth = ejWidth + 2*alThickness; // aluminum on both sides
+	double caseDepth = ejDepth + alThickness; // aluminum only in front
+	
 	// Create aluminum casing shape
-	auto casing_solid = new G4Box("casing", 5.5*cm, 5.5*cm, 3.2*cm);
+	auto casing_solid = new G4Box("casing", caseWidth/2, caseWidth/2, caseDepth/2);
 	
 	// Create ej299 detector shape
-	auto ej299_solid = new G4Box("detector", 5.24*cm, 5.24*cm, 2.54*cm);
+	auto ej299_solid = new G4Box("detector", ejWidth/2, ejWidth/2, ejDepth/2);
 	
 	// Create ej299 detector material
 	double density = 1.08*g/cm3;
@@ -35,8 +44,8 @@ construct(G4LogicalVolume* world)
 	// Place casing in world volume at origin.
 	new G4PVPlacement(0, G4ThreeVector(0,0,0), casing_logV, "casingPhys", world, false, 0);
 	
-	// Place the ej299 volume inside casing at casing origin.
-	new G4PVPlacement(0, G4ThreeVector(0,0,0), ej299_logV, "ej299Phys", casing_logV, false, 0);
+	// Place the ej299 volume inside casing. Offset in z direction so scintillator touches -z edge of case (zero aluminum volume in back).
+	new G4PVPlacement(0, G4ThreeVector(0,0,-alThickness/2), ej299_logV, "ej299Phys", casing_logV, false, 0);
 }
 
 void
