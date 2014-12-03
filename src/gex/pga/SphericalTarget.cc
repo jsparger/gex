@@ -149,7 +149,8 @@ GeneratePrimaries(G4Event* theEvent)
 	// TODO: check to make sure we have not travelled so far that we will not hit the target.
 	// recalculate target direction so we are actually shooting at the target even if 
 	// the solid angle is the wrong size.
-	toCenter = targetPos - pos;
+	toCenter = targetPos - pos; // TODO: why is this calculated again?
+	G4ThreeVector toCenterDir = toCenter.unit();
 	
 	// generate vector within the cone with aperture size 2*phi directed at target.
 	double rTheta = G4UniformRand()*2*pi;//flat.fire(0, 2*pi);
@@ -159,28 +160,31 @@ GeneratePrimaries(G4Event* theEvent)
 	double rY = c*std::sin(rTheta);
 	G4ThreeVector v = G4ThreeVector(rX,rY,rZ).unit();
 	
-	// if (recompute)
-	// {
-	// 	std::cout << v << "\n";
-	// }
-	
-	// rotate v to point at target.
-	if (recompute)
+	// Check to see if toCenter is parallel to up (the z-axis) to within some tolerance.
+	if (1 - std::abs(up.dot(toCenterDir)) > 1e-9)
 	{
-		rotAxis = up.cross(toCenter.unit());
+		// if not parallel, rotate v to point at target.
+		// (this will fail if up is parallel to toCenterDir)
+		if (recompute)
+		{
+			rotAxis = up.cross(toCenterDir);
+		}
+		double rotAngle = up.angle(toCenter);
+		v = v.rotate(rotAxis,rotAngle);
 	}
-	double rotAngle = up.angle(toCenter);
-	G4ThreeVector momentumDirection = v.rotate(rotAxis,rotAngle);
-	// std::cout << "phi = " << std::scientific << phi << " rTheta = " << rTheta << " rZ = " << rZ << " v = " << v << " momentumDirection = " << momentumDirection << "\n";
-	// if (recompute)
-	// {
-	// 	std::cout << momentumDirection*(toCenter.mag())/m << "\n";
-	// }
+	else
+	{
+		// if it is parallel, check to see whether it is facing in + or - z direction.
+		// if negative, flip z of vector.
+		double cz = toCenterDir.z();
+		double sign = (0 < cz) - (cz < 0);
+		v.setZ(v.z()*sign);
+	}
 	
 	//set the properties of the primary
 	gun->SetParticleDefinition(particleDist->getParticleType(theEvent));
 	gun->SetParticleEnergy(energyDist->getEnergy(theEvent));
-	gun->SetParticleMomentumDirection(momentumDirection);
+	gun->SetParticleMomentumDirection(v);
 	gun->SetParticlePosition(pos);
 	
 	// fill in source data for event
