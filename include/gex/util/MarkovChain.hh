@@ -25,6 +25,7 @@ namespace util {
 /// \class MarkovChain
 /// \brief Update a value according to a markov chain.
 ///
+/// MarkovChain lets you update a value according to a markov chain. Its use case is a bit hacky, and there are some caveats to its use (no polymorphic values allowed). This class is intended for use whenever you want to use code that accepts a pointer whose underlying value you would like to change behind the scenes. An example might be changing the particle energy of a source according to a decay scheme you have modeled as a Markov chain. See examples/ej299_compton for an example.
 
 template <typename T>
 class MarkovChain
@@ -102,8 +103,12 @@ public:
 		};
 	}
 	
-	virtual ~MarkovChain() {;}
+	virtual ~MarkovChain() 
+	{
+		delete current;
+	}
 	
+	/// Add a new transition to the chain. Provide a starting state, an ending state, and a probability for this transition to occur. Note that the transition probabilities will be normalized. DANGER! Do not use polymorphic states. The object pointed to by T* must really be of type T. This is because MarkovChain relies on copying to change the state value.
 	virtual MarkovChain<T>& add(T* startState, T* endState, double transitionProb)
 	{
 		Node& start = stateMap[startState];
@@ -124,6 +129,7 @@ public:
 		return *this;
 	}
 	
+	/// Call this method to advance to the next state in the MarkovChain according to the current state, its connections, and transition probabilities.
 	virtual void advance()
 	{
 		T* next = currentNode->advance();
@@ -131,6 +137,7 @@ public:
 		current->value = *next;
 	}
 	
+	// Returns a reference to the state. The value of the state may change whenever advance() is called.
 	virtual T& state()
 	{
 		return current->value;
