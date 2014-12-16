@@ -35,7 +35,7 @@ int main()
 
 	// create a multithreaded simulation with 4 threads. This *must* be done first in a program to initialize Geant4.
 	gex::sim::Geant4Simulation sim(true,4);
-	
+
 	// create our custom sensitivizer
 	std::string fileName = "../output/ej299";
 	auto sens = new MySensitivizer(fileName,"tree","data");
@@ -77,3 +77,65 @@ int main()
 
 	std::cout << "simulation complete!\n";
 }
+
+// #include <iostream>
+//
+// class A
+// {
+// public:
+// 	A* operator-> ()
+// 	{
+// 		std::cout << "banana!\n";
+// 		return this;
+// 	}
+//
+// 	A& operator* ()
+// 	{
+// 		std::cout << "cat!\n";
+// 		return *this;
+// 	}
+//
+// 	int dog = 5;
+// };
+//
+// class B
+// {
+// public:
+// 	B(A* handle)
+// 		: h(handle) {}
+//
+// 	void bark()
+// 	{
+// 		std::cout << h->dog << "\n";
+// 	}
+//
+// 	A* h;
+// };
+//
+// int main()
+// {
+// 	A handle;
+// 	A x; x.dog = 7;
+// 	A y; y.dog = 9;
+//
+// 	B b(&handle);
+// 	A* hptr = &handle;
+// 	A* xptr = &x;
+// 	A* yptr = &y;
+//
+// 	b.bark();
+// 	*hptr = *xptr;
+// 	b.bark();
+// 	*hptr = *yptr;
+// 	b.bark();
+//
+//
+// 	A thing;
+// 	A* ptr = &a;
+// 	A** ptrptr = &ptr;
+//
+// 	std::cout << ptrptr->dog << "\n":
+//
+//
+// 	return 0;
+// }

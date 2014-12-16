@@ -23,6 +23,7 @@
 #include <gex/pga/GenericSource.hh>
 #include <gex/pga/SphericalTarget.hh>
 #include <gex/create.hh>
+#include <gex/util/MarkovChain.hh>
 
 MyUserActionInitialization::
 MyUserActionInitialization(const std::string& fname)
@@ -50,19 +51,42 @@ Build() const
 	// -- Build the source:
 	
 	// Create a struct to hold all the distributions for our source. Initialize the distributions as we like. In this case, we create an isotropic point source at 1 meter down the x-axis which emits 0.5 MeV gamma rays. 
+	// struct SourceConfig {
+	// 	gex::pga::PointSource pointSource = {G4ThreeVector(0,0,10*cm)};
+	// 	gex::pga::MonoEnergyDist monoEnergy = {662*keV};
+	// 	gex::pga::SingleParticle singleParticle = {G4Gamma::Definition()};
+	// };
+	
 	struct SourceConfig {
-		gex::pga::PointSource pointSource = {G4ThreeVector(0,0,10*cm)}; // TODO: error when all components zero except z... say trying to rotate around zero lenght vector...?
-		gex::pga::MonoEnergyDist monoEnergy = {662*keV};
+		gex::pga::PointSource pointSource = {G4ThreeVector(0,0,10*cm)};
 		gex::pga::SingleParticle singleParticle = {G4Gamma::Definition()};
 	};
 	
 	// Create a SourceConfig and let the UserActionManager adopt it. We do this because we need the distributions in our SourceConfig to live for the duration of the simulation. If the UserActionManager did not adopt the SourceConfig, it would be deleted at the end of this Build() method.
 	auto* sourceConfig = gex::create<SourceConfig>();
 	
+	auto* energy511 = gex::create<gex::pga::MonoEnergyDist>(511*keV);
+	auto* energy1274 = gex::create<gex::pga::MonoEnergyDist>(1274*keV);
+	auto* energyChain = gex::create<gex::util::MarkovChain<gex::pga::MonoEnergyDist>>();
+	
+	// create a markov chain describing na-22 decay
+	energyChain->add(energy511, energy1274, 1.0)
+		.add(energy1274, energy511, 0.902)
+		.add(energy1274, energy1274, 0.097);
+	
+	// register our clock reset function to be called at the end of each event.
+	auto chainAdvanceFcn = [energyChain] { energyChain->advance(); };
+	gex::create<gex::ua::Callback>(chainAdvanceFcn, std::set<gex::ua::Cycle>{gex::ua::Cycle::EVENT_END});
+	
 	// create a targeted source (to reduce simulation time.)
+	// auto* source = new gex::pga::SphericalTarget(
+	// 	G4ThreeVector(0,0,0), 10*cm,
+	// 	&sourceConfig->monoEnergy,
+	// 	&sourceConfig->pointSource,
+	// 	&sourceConfig->singleParticle);
 	auto* source = new gex::pga::SphericalTarget(
 		G4ThreeVector(0,0,0), 10*cm,
-		&sourceConfig->monoEnergy,
+		&energyChain->state(),
 		&sourceConfig->pointSource,
 		&sourceConfig->singleParticle);
 	
