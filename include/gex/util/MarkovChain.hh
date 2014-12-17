@@ -25,7 +25,7 @@ namespace util {
 /// \class MarkovChain
 /// \brief Update a value according to a markov chain.
 ///
-/// MarkovChain lets you update a value according to a markov chain. Its use case is a bit hacky, and there are some caveats to its use (no polymorphic values allowed). This class is intended for use whenever you want to use code that accepts a pointer whose underlying value you would like to change behind the scenes. An example might be changing the particle energy of a source according to a decay scheme you have modeled as a Markov chain. See examples/ej299_compton for an example.
+/// MarkovChain lets you update a value according to a markov chain. Its use case is a bit hacky, and there are some caveats to its use (no polymorphic state values allowed). This class is intended for use whenever you want to use code that accepts a pointer whose underlying value you would like to change behind the scenes. An example might be changing the particle energy of a source according to a decay scheme you have modeled as a Markov chain. See examples/ej299_compton for an example.
 
 template <typename T>
 class MarkovChain

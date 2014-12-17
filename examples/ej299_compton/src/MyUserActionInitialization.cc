@@ -66,12 +66,14 @@ Build() const
 	auto* sourceConfig = gex::create<SourceConfig>();
 	
 	auto* energy511 = gex::create<gex::pga::MonoEnergyDist>(511*keV);
+	auto* energy511_2 = gex::create<gex::pga::MonoEnergyDist>(511*keV);
 	auto* energy1274 = gex::create<gex::pga::MonoEnergyDist>(1274*keV);
 	auto* energyChain = gex::create<gex::util::MarkovChain<gex::pga::MonoEnergyDist>>();
 	
 	// create a markov chain describing na-22 decay
-	energyChain->add(energy511, energy1274, 1.0)
-		.add(energy1274, energy511, 0.902)
+	energyChain->add(energy511,energy511_2,1.0)
+		.add(energy511_2, energy1274, 1.0)
+		.add(energy1274, energy511, 0.90382)
 		.add(energy1274, energy1274, 0.097);
 	
 	// register our clock reset function to be called at the end of each event.
