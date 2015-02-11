@@ -13,6 +13,7 @@
 #include "G4PVPlacement.hh"
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RotationMatrix.hh"
 #include "G4Box.hh"
 
 void 
@@ -30,6 +31,10 @@ construct(G4LogicalVolume* world)
 	double alThickness = 3*mm;
 	double caseWidth = ejWidth + 2*alThickness; // aluminum on both sides
 	double caseDepth = ejDepth + alThickness; // aluminum only in front
+	
+	// rotation
+	G4RotationMatrix* rotArray = new G4RotationMatrix();
+	rotArray->rotateX(-90.0*deg);
 	
 	// Create aluminum casing shape
 	auto casing_solid = new G4Box("casing", caseWidth/2, caseWidth/2, caseDepth/2);
@@ -52,7 +57,7 @@ construct(G4LogicalVolume* world)
 	ej299_logV = new G4LogicalVolume(ej299_solid, ej299, "ej299Log");
 	
 	// Place casing in world volume at origin.
-	new G4PVPlacement(0, G4ThreeVector(0,0,0), casing_logV, "casingPhys", world, false, 0);
+	new G4PVPlacement(rotArray, G4ThreeVector(0,0,0), casing_logV, "casingPhys", world, false, 0);
 	
 	// Place the ej299 volume inside casing. Offset in z direction so scintillator touches -z edge of case (zero aluminum volume in back).
 	new G4PVPlacement(0, G4ThreeVector(0,0,-alThickness/2), ej299_logV, "ej299Phys", casing_logV, false, 0);

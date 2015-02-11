@@ -60,6 +60,7 @@ Build() const
 	struct SourceConfig {
 		gex::pga::PointSource pointSource = {G4ThreeVector(0,0,10*cm)};
 		gex::pga::SingleParticle singleParticle = {G4Gamma::Definition()};
+		gex::pga::Isotropic isotropic;
 	};
 	
 	// Create a SourceConfig and let the UserActionManager adopt it. We do this because we need the distributions in our SourceConfig to live for the duration of the simulation. If the UserActionManager did not adopt the SourceConfig, it would be deleted at the end of this Build() method.
@@ -86,9 +87,18 @@ Build() const
 	// 	&sourceConfig->monoEnergy,
 	// 	&sourceConfig->pointSource,
 	// 	&sourceConfig->singleParticle);
-	auto* source = new gex::pga::SphericalTarget(
-		G4ThreeVector(0,0,0), 10*cm,
+	
+	// create a targeted source with markov chain
+	// auto* source = new gex::pga::SphericalTarget(
+	// 	G4ThreeVector(0,0,0), 10*cm,
+	// 	&energyChain->state(),
+	// 	&sourceConfig->pointSource,
+	// 	&sourceConfig->singleParticle);
+	
+	// create a generic source using the distributions in our source configuration.
+	auto* source = new gex::pga::GenericSource(
 		&energyChain->state(),
+		&sourceConfig->isotropic,
 		&sourceConfig->pointSource,
 		&sourceConfig->singleParticle);
 	

@@ -18,6 +18,7 @@
 #include <gex/geom/BoxWorld.hh>
 
 #include "EJ299Detector.hh"
+#include "ConcreteGround.hh"
 #include "MySensitivizer.hh"
 #include "MyUserActionInitialization.hh"
 
@@ -41,13 +42,14 @@ int main()
 	auto sens = new MySensitivizer(fileName,"tree","data");
 
 	// Create our world volume.
-	gex::geom::BoxWorld bw(1*m,1*m,1*m);
+	gex::geom::BoxWorld bw(5*m,2*m,5*m);
 	G4VPhysicalVolume* world = bw.construct();
 
 	// create a geometry manager. Give it our world volume and sensitivizer.
 	// next, we add the geometry elements we want in our world volume. In this case we add a custom built detector and a custom built concrete slab.
 	auto geometryManager = new gex::geom::GeometryManager(world,sens);
 	geometryManager->addGeometry(std::make_unique<EJ299Detector>());
+	geometryManager->addGeometry(std::make_unique<ConcreteGround>());
 
 	// set up the simulation:
 	// - let our geometry manager be the detector construction
@@ -57,7 +59,7 @@ int main()
 	sim.setDetectorConstruction(geometryManager);
 	sim.setPhysicsList(new QGSP_BIC());
 	sim.setUserActionInitialization(new MyUserActionInitialization(fileName));
-	sim.setNumberOfEvents(1e6);
+	sim.setNumberOfEvents(1e7);
 
 	// initialize the simulation.
 	sim.initialize();
